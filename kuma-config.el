@@ -9,6 +9,8 @@
 (setq pkgs '
       (       
        rust-mode
+       company
+       company-go
        ))
 
 

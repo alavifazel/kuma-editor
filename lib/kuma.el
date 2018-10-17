@@ -1,10 +1,6 @@
 (require 'package)
 (require 'cl)
 
-(setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
-                         ;("marmalade" . "https://marmalade-repo.org/packages/")
-                         ("melpa" . "https://melpa.org/packages/")))
-
 (defun install (required-pkgs)
   (setq pkgs-to-install
       (let ((uninstalled-pkgs (remove-if 'package-installed-p required-pkgs)))
@@ -22,6 +18,17 @@
   (--each (f-directories dir) (add-to-list 'load-path it)))
 
 (defun kuma-initialize ()
+  (require 'package)
+  (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
+		      (not (gnutls-available-p))))
+	 (proto (if no-ssl "http" "https")))
+    ;; Comment/uncomment these two lines to enable/disable MELPA and MELPA Stable as desired
+    (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
+    ;;(add-to-list 'package-archives (cons "melpa-stable" (concat proto "://stable.melpa.org/packages/")) t)
+    (when (< emacs-major-version 24)
+      ;; For important compatibility libraries like cl-lib
+      (add-to-list 'package-archives (cons "gnu" (concat proto "://elpa.gnu.org/packages/")))))
+  (package-initialize)
   ;; highlight matching params
   (show-paren-mode 1)
 
@@ -47,8 +54,26 @@
 
   ;; enable line numbers globally
   (global-linum-mode t) 
+ 
+  ;; Setting default font to Consolas
+  (set-face-attribute 'default nil
+		      :family "monospace"
+		      :height 110
+		      :weight 'normal
+		      :width 'normal)
+  ;; Loading a dark theme
+  (load-theme 'deeper-blue) 
+
+
   ;; install missing packages
   (install pkgs)
+
+  (require 'company)
+  (setq company-tooltip-limit 20)                      ; bigger popup window
+  (setq company-idle-delay .3)                         ; decrease delay before autocompletion popup shows
+  (setq company-echo-delay 0)                          ; remove annoying blinking
+  (setq company-begin-commands '(self-insert-command)) ; start autocompletion only after typing
+  (global-company-mode)
   )
 
 
