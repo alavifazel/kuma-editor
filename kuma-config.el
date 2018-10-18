@@ -11,6 +11,8 @@
        rust-mode
        company
        company-go
+       company-irony
+       irony
        ))
 
 
