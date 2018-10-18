@@ -2,9 +2,10 @@
 
 echo "Installing Kuma editor..."
 
-echo "#! /bin/sh" > ./kuma
+mkdir script
+echo "#! /bin/sh" > ./script/kuma
 mkdir -p ~/.kuma.d/
-cp -r ./lib ~/.kuma.d/
+cp -r ./kuma/ ~/.kuma.d/
 cp kuma-config.el ~/.kuma.d/kuma-config.el
 
 while true; do
@@ -16,11 +17,12 @@ while true; do
     esac
 done
 
-echo 'export KUMA_HOME=~/.kuma.d' >> ./kuma
-echo 'emacs --name Kuma --no-site-file --no-site-lisp --no-splash --title Kuma -q -l ~/.kuma.d/kuma-config.el $@' >> ./kuma
+echo 'export KUMA_HOME=~/.kuma.d' >> ./script/kuma
+echo 'emacs --name Kuma --no-site-file --no-site-lisp --no-splash --title Kuma -q -l ~/.kuma.d/kuma-config.el $@' >> ./script/kuma
 
-sudo mv ./kuma /usr/bin
+sudo mv ./script/kuma /usr/bin
 sudo chmod -R 777 ~/.kuma.d/
 sudo chmod +x /usr/bin/kuma
+rm -r script
 
 echo "Done."

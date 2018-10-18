@@ -17,7 +17,7 @@
 
 
 (setq kuma-home (getenv "KUMA_HOME"))
-(setq kuma-lib (concat kuma-home "/lib"))
+(setq kuma-lib (concat kuma-home "/kuma"))
 
 ;; loading up
 (add-to-list 'load-path kuma-lib)
